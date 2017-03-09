@@ -1,0 +1,18 @@
+{
+  "id": "org.template.regression",
+  "description": "",
+  "engineFactory": "org.template.regression.RegressionEngineFactory",
+  "datasource": {
+    "params" : {
+      "appName": "INVALID_APP_NAME"
+    }
+  },
+  "algorithms": [
+    {
+      "name": "algo",
+      "params": {
+        "mult" : 1
+      }
+    }
+  ]
+}
