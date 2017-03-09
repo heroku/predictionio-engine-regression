@@ -9,29 +9,36 @@ import org.apache.spark.rdd.RDD
 
 import grizzled.slf4j.Logger
 
-case class AlgorithmParams(mult: Int) extends Params
+import org.apache.spark.mllib.regression.LinearRegressionModel
+import org.apache.spark.mllib.regression.LinearRegressionWithSGD
+import org.apache.spark.mllib.linalg.Vectors
+
+case class AlgorithmParams(numIterations: Int, stepSize: Double) extends Params
 
 class Algorithm(val ap: AlgorithmParams)
-  // extends PAlgorithm if Model contains RDD[]
-  extends P2LAlgorithm[PreparedData, Model, Query, PredictedResult] {
+  extends P2LAlgorithm[PreparedData, LinearRegressionModel, Query, PredictedResult] {
 
   @transient lazy val logger = Logger[this.type]
 
-  def train(sc: SparkContext, data: PreparedData): Model = {
-    // Simply count number of events
-    // and multiple it by the algorithm parameter
-    // and store the number as model
-    val count = data.events.count().toInt * ap.mult
-    new Model(mc = count)
+  def train(sc: SparkContext, data: PreparedData): LinearRegressionModel = {
+    val model = LinearRegressionWithSGD.train(
+      data.labeledPoints,
+      ap.numIterations,
+      ap.stepSize)
+
+    val valuesAndPreds = data.labeledPoints.map { point =>
+      val prediction = model.predict(point.features)
+      (point.label, prediction)
+    }
+
+    model
   }
 
-  def predict(model: Model, query: Query): PredictedResult = {
-    // Prefix the query with the model data
-    val result = s"${model.mc}-${query.q}"
-    PredictedResult(p = result)
+  def predict(model: LinearRegressionModel, query: Query): PredictedResult = {
+    val features = Vectors.dense(
+      Array(query.x)
+    )
+    val y = model.predict(features)
+    new PredictedResult(y)
   }
-}
-
-class Model(val mc: Int) extends Serializable {
-  override def toString = s"mc=${mc}"
 }

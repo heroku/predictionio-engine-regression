@@ -10,6 +10,8 @@ import org.apache.predictionio.data.store.PEventStore
 import org.apache.spark.SparkContext
 import org.apache.spark.SparkContext._
 import org.apache.spark.rdd.RDD
+import org.apache.spark.mllib.regression.LabeledPoint
+import org.apache.spark.mllib.linalg.Vectors
 
 import grizzled.slf4j.Logger
 
@@ -23,22 +25,36 @@ class DataSource(val dsp: DataSourceParams)
 
   override
   def readTraining(sc: SparkContext): TrainingData = {
+    val pointsRDD: RDD[LabeledPoint] = PEventStore.aggregateProperties(
+        appName = sys.env("PIO_EVENTSERVER_APP_NAME"),
+        entityType = "user",
+        required = Some(List("x", "y"))
+      )(sc)
+      .map { case (entityId, properties) =>
+        try {
+          LabeledPoint(properties.get[Double]("label"),
+            Vectors.dense(Array(
+              properties.get[Double]("x"),
+              properties.get[Double]("y")
+            ))
+          )
+        } catch {
+          case e: Exception => {
+            logger.error(s"Failed to get properties ${properties} of" +
+              s" ${entityId}. Exception: ${e}.")
+            throw e
+          }
+        }
+      }
 
-    // read all events of EVENT involving ENTITY_TYPE and TARGET_ENTITY_TYPE
-    val eventsRDD: RDD[Event] = PEventStore.find(
-      appName = dsp.appName,
-      entityType = Some("ENTITY_TYPE"),
-      eventNames = Some(List("EVENT")),
-      targetEntityType = Some(Some("TARGET_ENTITY_TYPE")))(sc)
-
-    new TrainingData(eventsRDD)
+    new TrainingData(pointsRDD)
   }
 }
 
 class TrainingData(
-  val events: RDD[Event]
+  val labeledPoints: RDD[LabeledPoint]
 ) extends Serializable {
   override def toString = {
-    s"events: [${events.count()}] (${events.take(2).toList}...)"
+    s"labeledPoints: [${labeledPoints.count()}] (${labeledPoints.take(2).toList}...)"
   }
 }
