@@ -6,11 +6,11 @@ import org.scalatest.Matchers
 class ServingTest
   extends FlatSpec with Matchers {
 
-  val query = Query(x = 5)
+  val query = Query(vector = Array(5))
   val predictedResults = Seq(
-    PredictedResult(y = 25),
-    PredictedResult(y = 50),
-    PredictedResult(y = 75))
+    PredictedResult(label = 25),
+    PredictedResult(label = 50),
+    PredictedResult(label = 75))
 
   "serve" should "return the first prediction" in {
     val serving = new Serving()
@@ -18,6 +18,6 @@ class ServingTest
       query = query,
       predictedResults = predictedResults)
     prediction shouldBe a [PredictedResult]
-    prediction.y shouldEqual 25
+    prediction.label shouldEqual 25
   }
 }

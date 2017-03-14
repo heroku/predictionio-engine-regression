@@ -1,0 +1,5 @@
+{"event":"$set","entityType":"student","entityId":"1","properties":{"aptitude-grade":95,"overall-grade":85}}
+{"event":"$set","entityType":"student","entityId":"2","properties":{"aptitude-grade":85,"overall-grade":95}}
+{"event":"$set","entityType":"student","entityId":"3","properties":{"aptitude-grade":80,"overall-grade":70}}
+{"event":"$set","entityType":"student","entityId":"4","properties":{"aptitude-grade":70,"overall-grade":65}}
+{"event":"$set","entityType":"student","entityId":"5","properties":{"aptitude-grade":60,"overall-grade":70}}

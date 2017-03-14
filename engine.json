@@ -11,7 +11,7 @@
       "name": "algo",
       "params": {
         "numIterations" : 100,
-        "stepSize" : 0.00000001
+        "stepSize" : 0.0004
       }
     }
   ]

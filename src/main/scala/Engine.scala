@@ -3,9 +3,9 @@ package org.template.regression
 import org.apache.predictionio.controller.IEngineFactory
 import org.apache.predictionio.controller.Engine
 
-case class Query(x: Double) extends Serializable
+case class Query(vector: Array[Double]) extends Serializable
 
-case class PredictedResult(y: Double) extends Serializable
+case class PredictedResult(label: Double) extends Serializable
 
 object RegressionEngineFactory extends IEngineFactory {
   def apply() = {
