@@ -7,7 +7,7 @@ case class Query(vector: Array[Double]) extends Serializable
 
 case class PredictedResult(label: Double) extends Serializable
 
-object RegressionEngineFactory extends IEngineFactory {
+object RegressionEngine extends IEngineFactory {
   def apply() = {
     new Engine(
       classOf[DataSource],

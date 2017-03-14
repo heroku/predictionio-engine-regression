@@ -1,7 +1,7 @@
 {
   "id": "org.template.regression",
   "description": "",
-  "engineFactory": "org.template.regression.RegressionEngineFactory",
+  "engineFactory": "org.template.regression.RegressionEngine",
   "datasource": {
     "params" : {
     }

@@ -9,7 +9,7 @@ class EngineTest
   extends FlatSpec with Matchers {
 
   "apply" should "return a new engine instance" in {
-    val engine = RegressionEngineFactory.apply()
+    val engine = RegressionEngine.apply()
     engine shouldBe an [Engine[_,_,_,_,_,_]]
   }
 }
