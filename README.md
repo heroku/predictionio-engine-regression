@@ -43,6 +43,10 @@ $ pio import --appid 1 --input data/initial-events.json
 
 $ pio build
 
+$ PIO_EVENTSERVER_APP_NAME=regress pio eval \
+    org.template.regression.MeanSquaredErrorEvaluation \
+    org.template.regression.EngineParamsList 
+
 $ PIO_EVENTSERVER_APP_NAME=regress pio train
 
 $ PIO_EVENTSERVER_APP_NAME=regress pio deploy
