@@ -157,11 +157,15 @@ heroku logs -t
 This engine is already setup for PredictionIO's [hyperparamter tuning](https://predictionio.incubator.apache.org/evaluation/paramtuning/).
 
 ```bash
-PIO_EVENTSERVER_APP_NAME=regress pio eval \
+heroku run bash --size Performance-L
+$ cd pio-engine/
+$ pio eval \
     org.template.regression.MeanSquaredErrorEvaluation \
-    org.template.regression.EngineParamsList 
+    org.template.regression.EngineParamsList \
+    -- $PIO_SPARK_OPTS
 ```
 
+✏️ Memory parameters are set to fit the [dyno `--size`](https://devcenter.heroku.com/articles/dyno-types#available-dyno-types) set in the `heroku run` command.
 
 # Usage ⌨️
 
