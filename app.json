@@ -1,0 +1,25 @@
+{
+  "name": "PredictionIO Regression Engine",
+  "description": "Use Spark's Linear Regression algorithm to predict a label from a vector of values.",
+  "scripts": {
+  },
+  "env": {
+    "PIO_EVENTSERVER_ACCESS_KEY": {
+      "generator": "secret"
+    },
+    "PIO_EVENTSERVER_APP_NAME": "regress-test"
+  },
+  "formation": {
+  },
+  "addons": [
+    "heroku-postgresql"
+  ],
+  "buildpacks": [
+    {
+      "url": "https://github.com/heroku/heroku-buildpack-jvm-common.git"
+    },
+    {
+      "url": "https://github.com/heroku/predictionio-buildpack.git#testpack"
+    }
+  ]
+}
