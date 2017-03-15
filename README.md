@@ -22,7 +22,7 @@ Please follow steps in order.
 1. [Eventserver](#2-eventserver)
    1. [Create the eventserver](#create-the-eventserver)
    1. [Deploy the eventserver](#deploy-the-eventserver)
-1. [Classification engine](#3-classification-engine)
+1. [Regression engine](#3-regression-engine)
    1. [Create the engine](#create-the-engine)
    1. [Connect the engine with the eventserver](#connect-the-engine-with-the-eventserver)
    1. [Import data](#import-data)
