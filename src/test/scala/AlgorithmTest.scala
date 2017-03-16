@@ -38,7 +38,7 @@ class AlgorithmTest
       firstUpdated = now,
       lastUpdated = now)))
 
-  "train" should "return a model" in {
+  ignore should "return a model" in {
     val dataSourceRDD = sparkContext.parallelize(dataSource)
     val preparedData = new PreparedData(values = dataSourceRDD)
     val model = algorithm.train(sparkContext, preparedData)
