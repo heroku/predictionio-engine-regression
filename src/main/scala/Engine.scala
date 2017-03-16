@@ -1,19 +1,20 @@
 package org.template.regression
 
-import org.apache.predictionio.controller.EngineFactory
-import org.apache.predictionio.controller.Engine
+import org.apache.predictionio.controller.{EmptyEvaluationInfo, Engine, EngineFactory}
 
-case class Query(vector: Array[Double]) extends Serializable
-
-case class PredictedResult(label: Double) extends Serializable
-case class ActualResult(label: Double) extends Serializable
+case class Query(vector: Array[Double])
+case class PredictedResult(label: Double)
+case class ActualResult(label: Double)
 
 object RegressionEngine extends EngineFactory {
-  def apply() = {
+  type Type = Engine[TrainingData, EmptyEvaluationInfo, PreparedData, Query, PredictedResult, ActualResult]
+
+  def apply(): Type = {
     new Engine(
       classOf[DataSource],
       classOf[Preparator],
       Map("algo" -> classOf[Algorithm]),
-      classOf[Serving])
+      classOf[Serving]
+    )
   }
 }
