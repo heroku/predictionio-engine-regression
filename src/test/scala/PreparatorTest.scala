@@ -7,7 +7,7 @@ import org.apache.predictionio.data.storage.PropertyMap
 import org.joda.time.DateTime
 
 class PreparatorTest
-  extends FlatSpec with SharedSingletonContext with Matchers {
+  extends FlatSpec with SharedSparkContext with Matchers {
 
   val now = new DateTime
   val dataSource = Seq(

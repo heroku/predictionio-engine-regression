@@ -54,7 +54,7 @@ class Algorithm(val ap: AlgorithmParams)
   }
 
   def exportToPostgres(dataWithPredictions: RDD[(Double, (String, PropertyMap))], sc: SparkContext){
-    val appId = sys.env("PIO_EVENTSERVER_APP_ID")
+    val appId = sys.env("PIO_EVENTSERVER_APP_ID").toInt
     val now = DateTime.now
 
     val uuid = java.util.UUID.randomUUID.toString
@@ -75,6 +75,6 @@ class Algorithm(val ap: AlgorithmParams)
     }
 
     val eventServer = Storage.getPEvents()
-    eventServer.write(events,appId.toInt)(sc)
+    eventServer.write(events, appId)(sc)
   }
 }

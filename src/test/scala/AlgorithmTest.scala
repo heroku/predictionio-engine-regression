@@ -10,8 +10,11 @@ import org.apache.spark.mllib.regression.LinearRegressionModel
 import org.apache.spark.mllib.regression.LabeledPoint
 import org.apache.spark.mllib.linalg.Vectors
 
+import org.apache.predictionio.data.storage.Event
+import org.apache.predictionio.data.store.LEventStore
+
 class AlgorithmTest
-  extends FlatSpec with SharedSingletonContext with Matchers {
+  extends FlatSpec with SharedSparkContext with SharedStorageContext with IsolatedAppData with Matchers {
 
   val params = AlgorithmParams(numIterations = 100, stepSize = 0.0004)
   val algorithm = new Algorithm(params)
@@ -38,7 +41,7 @@ class AlgorithmTest
       firstUpdated = now,
       lastUpdated = now)))
 
-  ignore should "return a model" in {
+  "train" should "return a model and save training predictions" in {
     val dataSourceRDD = sparkContext.parallelize(dataSource)
     val preparedData = new PreparedData(values = dataSourceRDD)
     val model = algorithm.train(sparkContext, preparedData)
@@ -48,7 +51,12 @@ class AlgorithmTest
       Array(80.0)
     )
     val y = model.predict(features)
-    y shouldEqual 78.33065810593900
-    //            78.32954840770623
+    y shouldEqual 78.32954840770623 
+
+    val trainingPredictions: Iterator[Event] = LEventStore.find(
+      appName = sys.env("PIO_EVENTSERVER_APP_NAME"),
+      entityType = Some("training")
+    )
+    trainingPredictions.size shouldEqual 5
   }
 }

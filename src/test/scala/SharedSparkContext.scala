@@ -1,22 +1,22 @@
 package org.template.regression
 
 import org.apache.spark.{SparkConf, SparkContext}
-import org.scalatest.{BeforeAndAfterAll, Suite}
+import org.scalatest.{BeforeAndAfterEach, Suite}
 
-trait SharedSingletonContext extends BeforeAndAfterAll {
+trait SharedSparkContext extends BeforeAndAfterEach {
   this: Suite =>
 
   private var _sparkContext: Option[SparkContext] = None
   def sparkContext = _sparkContext.get
   val sparkConf = new SparkConf(false)
 
-  override def beforeAll() {
+  override def beforeEach() {
     _sparkContext = Some(new SparkContext("local", "test", sparkConf))
-    super.beforeAll()
+    super.beforeEach()
   }
 
-  override def afterAll() {
-    super.afterAll()
+  override def afterEach() {
+    super.afterEach()
     sparkContext.stop()
     _sparkContext = None
     System.clearProperty("spark.driver.port")

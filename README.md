@@ -198,3 +198,15 @@ If errors are occuring, sometimes a restart will help:
 ```bash
 heroku restart --app $ENGINE_NAME
 ```
+
+## Testing
+
+[ScalaTest](http://www.scalatest.org) is used for [unit tests](tests/scala/).
+
+Run the test suite with the test environment:
+
+```bash
+source conf/pio_env.test.sh && sbt test
+```
+
+You may need to locate `sbt` on your system. The PredictionIO distribution contains it at `sbt/sbt`.

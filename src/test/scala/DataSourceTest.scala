@@ -4,7 +4,7 @@ import org.scalatest.FlatSpec
 import org.scalatest.Matchers
 
 class DataSourceTest
-  extends FlatSpec with SharedSingletonContext with Matchers {
+  extends FlatSpec with SharedSparkContext with SharedStorageContext with IsolatedAppData with Matchers {
 
   ignore should "return the data" in {
     val dataSource = new DataSource(

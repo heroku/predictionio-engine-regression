@@ -34,7 +34,7 @@ class DataSource(dsp: DataSourceParams)
     val grades = PEventStore.aggregateProperties(
       appName = sys.env("PIO_EVENTSERVER_APP_NAME"),
       entityType = "student",
-      required = Some(List("aptitude-grade", "overall-grade"))
+      required = Some(List("aptitude-grade", "overall-grade", "", ""))
     )(sc)
 
     val events = grades.map {
