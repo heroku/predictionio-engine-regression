@@ -7,7 +7,12 @@
     "PIO_EVENTSERVER_ACCESS_KEY": {
       "generator": "secret"
     },
-    "PIO_EVENTSERVER_APP_NAME": "regress-test"
+    "PIO_EVENTSERVER_APP_NAME": {
+      "required": true
+    },
+    "PIO_EVENTSERVER_APP_ID": {
+      "required": true
+    }
   },
   "formation": {
   },
