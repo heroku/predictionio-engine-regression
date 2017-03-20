@@ -17,3 +17,5 @@ libraryDependencies ++= Seq(
 
 // SparkContext is shared between all tests via SharedSparkContext
 parallelExecution in Test := false
+// Do not run tests for build (should not use DB during Heroku build)
+test in assembly := {}
