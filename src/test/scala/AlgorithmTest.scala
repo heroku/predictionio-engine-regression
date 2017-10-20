@@ -48,7 +48,8 @@ class AlgorithmTest
       Array(80.0)
     )
     val y = model.predict(features)
-    y shouldEqual 78.33065810593900
+    y shouldEqual 78.32954840770623
     //            78.32954840770623
+    
   }
 }
