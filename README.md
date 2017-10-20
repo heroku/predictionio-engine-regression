@@ -18,65 +18,33 @@ Five **students'** aptitude and class grades are provided in the [included train
 
 Please follow steps in order.
 
-1. [Requirements](#1-requirements)
-1. [Eventserver](#2-eventserver)
-   1. [Create the eventserver](#create-the-eventserver)
-   1. [Deploy the eventserver](#deploy-the-eventserver)
-1. [Regression engine](#3-regression-engine)
-   1. [Create the engine](#create-the-engine)
-   1. [Connect the engine with the eventserver](#connect-the-engine-with-the-eventserver)
-   1. [Import data](#import-data)
-   1. [Deploy the engine](#deploy-the-engine)
-   1. [Scale-up](#scale-up)
-   1. [Retry release](#retry-release)
-   1. [Evaluation](#evaluation)
+1. [Requirements](#user-content-requirements)
+1. [Regression engine](#user-content-regression-engine)
+   1. [Create the engine](#user-content-create-the-engine)
+   1. [Import data](#user-content-import-data)
+   1. [Deploy the engine](#user-content-deploy-the-engine)
+   1. [Scale-up](#user-content-scale-up)
+   1. [Retry release](#user-content-retry-release)
+   1. [Evaluation](#user-content-evaluation)
 
 ### Usage
 
 Once deployed, how to work with the engine.
 
-* 🎯 [Query for predictions](#query-for-predictions)
-* [Diagnostics](#diagnostics)
+* 🎯 [Query for predictions](#user-content-query-for-predictions)
+* [Diagnostics](#user-content-diagnostics)
+* [Local development](#user-content-local-development)
 
 
 # Deploy to Heroku 🚀
 
-## 1. Requirements
+## Requirements
 
 * [Heroku account](https://signup.heroku.com)
 * [Heroku CLI](https://toolbelt.heroku.com), command-line tools
 * [git](https://git-scm.com/book/en/v2/Getting-Started-Installing-Git)
 
-## 2. Eventserver
-
-### Create the eventserver
-
-⚠️ **An eventserver may host data for multiple engines.** If you already have one provisioned, you may skip to the [engine](#3-regression-engine).
-
-```bash
-git clone \
-  https://github.com/heroku/predictionio-buildpack.git \
-  pio-eventserver
-
-cd pio-eventserver
-
-heroku create $EVENTSERVER_NAME
-heroku addons:create heroku-postgresql:hobby-dev
-# Note the buildpacks differ for eventserver & engine (below)
-heroku buildpacks:add -i 1 https://github.com/heroku/predictionio-buildpack.git
-heroku buildpacks:add -i 2 heroku/scala
-```
-
-### Deploy the eventserver
-
-We delay deployment until the database is ready.
-
-```bash
-heroku pg:wait && git push heroku master
-```
-
-
-## 3. Regression Engine
+## Regression Engine
 
 ### Create the engine
 
@@ -87,34 +55,14 @@ git clone \
 
 cd pio-engine-regress
 
-heroku create $ENGINE_NAME
-# Note the buildpacks differ for eventserver (above) & engine
-heroku buildpacks:add -i 1 https://github.com/heroku/heroku-buildpack-jvm-common.git
-heroku buildpacks:add -i 2 https://github.com/heroku/predictionio-buildpack.git
-```
-
-### Connect the engine with the eventserver
-
-```bash
-# Find the Postgres add-on ID for the eventserver.
-heroku addons --app $EVENTSERVER_NAME
-#
-# Example: `heroku-postgresql (postgresql-aerodynamic-00000)`
-#   `postgresql-aerodynamic-00000` is the add-on ID.
-#
-heroku addons:attach $POSTGRES_ADDON_ID
-
-# Then preset the Eventserver app name & key,
-heroku config:set \
-  PIO_EVENTSERVER_APP_NAME=regress \
-  PIO_EVENTSERVER_ACCESS_KEY=$RANDOM-$RANDOM-$RANDOM-$RANDOM-$RANDOM
+heroku create $ENGINE_NAME --buildpack https://github.com/heroku/predictionio-buildpack.git
 ```
 
 ### Import data
 
 Initial training data is automatically imported from [`data/initial-events.json`](data/initial-events.json).
 
-👓 When you're ready to begin working with your own data, see [data import methods in CUSTOM docs](https://github.com/heroku/predictionio-buildpack/blob/master/CUSTOM.md#import-data).
+👓 When you're ready to begin working with your own data, see [data import methods in CUSTOM docs](https://github.com/heroku/predictionio-buildpack/blob/master/CUSTOM.md#user-content-import-data).
 
 ### Deploy the engine
 
@@ -197,4 +145,25 @@ If errors are occuring, sometimes a restart will help:
 
 ```bash
 heroku restart --app $ENGINE_NAME
+```
+
+## Local Development
+
+If you want to customize an engine, then you'll need to get it running locally on your computer.
+
+➡️ **Setup [local development](https://github.com/heroku/predictionio-buildpack/blob/master/DEV.md)**
+
+### Import sample data
+
+```bash
+bin/pio app new regress
+PIO_EVENTSERVER_APP_NAME=regress data/import-events -f data/initial-events.json
+```
+
+### Run `pio`
+
+```bash
+bin/pio build
+bin/pio train
+bin/pio deploy
 ```
