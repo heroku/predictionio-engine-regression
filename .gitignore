@@ -3,3 +3,7 @@ target/
 pio.log
 /pio.sbt
 /.idea/
+PredictionIO-dist
+.env
+repo
+bin

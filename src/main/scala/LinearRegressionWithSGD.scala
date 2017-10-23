@@ -11,7 +11,7 @@ import org.apache.predictionio.data.storage.PropertyMap
 
 case class AlgorithmParams(numIterations: Int, stepSize: Double) extends Params
 
-class Algorithm(val ap: AlgorithmParams)
+class LinearRegressionWithSGD(val ap: AlgorithmParams)
   extends P2LAlgorithm[PreparedData, LinearRegressionModel, Query, PredictedResult] {
 
   @transient lazy val logger: Logger = Logger[this.type]
@@ -35,7 +35,7 @@ class Algorithm(val ap: AlgorithmParams)
 
   override def predict(model: LinearRegressionModel, query: Query): PredictedResult = {
     val features = Vectors.dense(query.vector)
-    val label = model.predict(features)
-    PredictedResult(label)
+    val prediction = model.predict(features)
+    PredictedResult(SGDPrediction=Some(prediction),DecisionTreePrediction=None,Average=None)
   }
 }

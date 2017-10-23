@@ -14,7 +14,7 @@ class AlgorithmTest
   extends FlatSpec with SharedSingletonContext with Matchers {
 
   val params = AlgorithmParams(numIterations = 100, stepSize = 0.0004)
-  val algorithm = new Algorithm(params)
+  val algorithm = new LinearRegressionWithSGD(params)
   val now = new DateTime
   val dataSource = Seq(
     ("1", PropertyMap(
