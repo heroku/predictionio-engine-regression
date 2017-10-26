@@ -4,11 +4,13 @@ import org.apache.predictionio.controller.{EmptyEvaluationInfo, Engine, EngineFa
 
 case class Query(vector: Array[Double])
 case class PredictedResult(
-  SGDPrediction: Option[Double],
-  DecisionTreePrediction: Option[Double],
-  Average: Option[Double]
+  sgdPrediction: Option[Double] = None,
+  decisionTreePrediction: Option[Double] = None,
+  isotonicPrediction: Option[Double] = None,
+  ridgePrediction: Option[Double] = None,
+  lassoPrediction: Option[Double] = None,
+  average: Option[Double] = None
 )
-
 
 case class ActualResult(label: Double)
 
@@ -21,7 +23,11 @@ object RegressionEngine extends EngineFactory {
       classOf[Preparator],
       Map(
         "sgd" -> classOf[LinearRegressionWithSGD],
-        "tree" -> classOf[DecisionTreeRegression]),
+        "tree" -> classOf[DecisionTreeRegression],
+        "iso" -> classOf[IsotonicRegressionAlgorithm],
+        "ridge" -> classOf[RidgeRegression],
+        "lasso" -> classOf[LassoRegression]
+      ),
       classOf[Serving]
     )
   }

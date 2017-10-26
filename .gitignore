@@ -7,3 +7,5 @@ PredictionIO-dist
 .env
 repo
 bin
+housing.json
+housing.txt
