@@ -5,36 +5,22 @@ import org.apache.predictionio.controller.LServing
 class Serving extends LServing[Query, PredictedResult] {
   override def serve(query: Query, predictedResults: Seq[PredictedResult]): PredictedResult = {
 
-    val isoPR : PredictedResult = predictedResults.find(_.isotonicPrediction.isDefined) match {
-      case Some(pr) => pr
-      case _ => new PredictedResult()
+    def fetchPR(pr: Option[PredictedResult]) : PredictedResult = pr match {
+        case Some(pr) => pr
+        case _ => new PredictedResult()
     }
 
-    val sgdPR : PredictedResult = predictedResults.find(_.sgdPrediction.isDefined) match {
-      case Some(pr) => pr
-      case _ => new PredictedResult()
-    }
+    val isoPR   : PredictedResult = fetchPR(predictedResults.find(_.isotonicPrediction.isDefined))
+    val sgdPR   : PredictedResult = fetchPR(predictedResults.find(_.sgdPrediction.isDefined))
+    val dtPR    : PredictedResult = fetchPR(predictedResults.find(_.decisionTreePrediction.isDefined))
+    val ridgePR : PredictedResult = fetchPR(predictedResults.find(_.ridgePrediction.isDefined))
+    val lassoPR : PredictedResult = fetchPR(predictedResults.find(_.lassoPrediction.isDefined))
 
-    val dtPR : PredictedResult = predictedResults.find(_.decisionTreePrediction.isDefined) match {
-      case Some(pr) => pr
-      case _ => new PredictedResult()
-    }
-    
-    val ridgePR : PredictedResult = predictedResults.find(_.ridgePrediction.isDefined) match {
-      case Some(pr) => pr
-      case _ => new PredictedResult()  
-    }
-
-    val lassoPR : PredictedResult = predictedResults.find(_.lassoPrediction.isDefined) match {
-      case Some(pr) => pr
-      case _ => new PredictedResult()
-    }
-
-    val isotonicPrediction : Double  = isoPR.isotonicPrediction.getOrElse(0)
-    val sgdPrediction : Double  = sgdPR.sgdPrediction.getOrElse(0)
+    val isotonicPrediction     : Double  = isoPR.isotonicPrediction.getOrElse(0)
+    val sgdPrediction          : Double  = sgdPR.sgdPrediction.getOrElse(0)
     val decisionTreePrediction : Double  = dtPR.decisionTreePrediction.getOrElse(0)
-    val ridgePrediction : Double  = ridgePR.ridgePrediction.getOrElse(0)
-    val lassoPrediction : Double  = lassoPR.lassoPrediction.getOrElse(0)
+    val ridgePrediction        : Double  = ridgePR.ridgePrediction.getOrElse(0)
+    val lassoPrediction        : Double  = lassoPR.lassoPrediction.getOrElse(0)
     
     val average : Double = Array(
       isotonicPrediction,

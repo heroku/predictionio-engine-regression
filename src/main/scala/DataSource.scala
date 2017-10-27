@@ -1,7 +1,7 @@
 package org.template.regression
 
 import grizzled.slf4j.Logger
-import org.apache.predictionio.controller.{EmptyEvaluationInfo, PDataSource, Params}
+import org.apache.predictionio.controller.{EmptyEvaluationInfo, PDataSource, Params, EmptyParams}
 import org.apache.predictionio.data.storage.PropertyMap
 import org.apache.predictionio.data.store.PEventStore
 import org.apache.spark.SparkContext
@@ -10,7 +10,7 @@ import org.json4s._
 
 case class DataSourceParams() extends Params
 
-class DataSource(dsp: DataSourceParams)
+class DataSource(ep: EmptyParams)
   extends PDataSource[TrainingData, EmptyEvaluationInfo, Query, ActualResult] {
 
   @transient lazy val logger: Logger = Logger[this.type]
@@ -26,7 +26,6 @@ class DataSource(dsp: DataSourceParams)
         Query(properties.get[Array[Double]]("vector")) -> ActualResult(properties.get[Double]("label"))
     }
     val eval = (TrainingData(events), new EmptyEvaluationInfo(), rdd)
-
     Seq(eval)
   }
 
