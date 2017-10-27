@@ -1,13 +1,20 @@
 # [PredictionIO](https://predictionio.incubator.apache.org) regression engine for [Heroku](http://www.heroku.com) 
 
-A machine learning app deployable to Heroku with the [PredictionIO buildpack](https://github.com/heroku/predictionio-buildpack). Use [Spark's Linear Regression algorithm](https://spark.apache.org/docs/1.6.3/mllib-linear-methods.html#regression) to predict a label from a vector of values.
+A machine learning app deployable to Heroku with the [PredictionIO buildpack](https://github.com/heroku/predictionio-buildpack). 
 
+This engine includes 5 different Spark MlLib regression algorithms to predict a label from a vector of values:
+
+* [Linear Regression](https://spark.apache.org/docs/1.6.3/mllib-linear-methods.html#regression) 
+* [Lasso Regression](https://spark.apache.org/docs/2.2.0/mllib-linear-methods.html#regression)
+* [Ridge Regression](https://spark.apache.org/docs/2.2.0/mllib-linear-methods.html#regression)
+* [Isotonic Regression](https://spark.apache.org/docs/2.1.0/mllib-isotonic-regression.html)
+* [Decision Tree Regression](https://spark.apache.org/docs/2.1.0/mllib-decision-tree.html#regression)
+
+The purpose of this implementation is to demostrate what its like to use multiple different algorithms in your PredictionIO engine.
 
 ## Demo Story 🐸
 
-This engine demonstrates prediction of a student's **class grade** based on their grade on an **aptitude test**. The model is trained with a small, example data set.
-
-Five **students'** aptitude and class grades are provided in the [included training data](data/).
+This engine demonstrates prediction of a student's **class grade** based on their grade on an **aptitude test**. Several different models are trained with a small, [example data set](data/).
 
 
 ## How To 📚
@@ -102,14 +109,16 @@ heroku logs -t
 
 ## Evaluation
 
-This engine is already setup for PredictionIO's [hyperparamter tuning](https://predictionio.incubator.apache.org/evaluation/paramtuning/).
+Three of the algorithms (linear, ridge & lasso regression) used in this Engine are setup for PredictionIO's [hyperparamter tuning](https://predictionio.incubator.apache.org/evaluation/paramtuning/).
+
+To run evaluation for the lasso algorithm:
 
 ```bash
 heroku run bash --size Performance-L
 $ cd pio-engine/
 $ pio eval \
-    org.template.regression.MeanSquaredErrorEvaluation \
-    org.template.regression.EngineParamsList \
+    org.template.regression.LassoMeanSquaredErrorEvaluation \
+    org.template.regression.LassoEngineParamsList \
     -- $PIO_SPARK_OPTS
 ```
 
@@ -119,18 +128,25 @@ $ pio eval \
 
 ## Query for predictions
 
-The linear regression model should only be queried with values within the training range, `60` to `95` for the sample data.
+The engine can be queried with values that range from `30` to `95`. 
 
 ```bash
 curl -X "POST" "http://$ENGINE_NAME.herokuapp.com/queries.json" \
      -H "Content-Type: application/json; charset=utf-8" \
-     -d $'{"vector": [ 80 ]}'
+     -d $'{"vector": [ 75 ]}'
 ```
 
-Sample Response:
+The response contains predictions from all of the algorithms, as well as an average:
 
 ```json
-{"label": 78.32954840770623}
+{
+  "sgdPrediction": 89.33332526516276,
+  "decisionTreePrediction": 86,
+  "isotonicPrediction": 85,
+  "ridgePrediction": 89.32992001469317,
+  "lassoPrediction": 89.30478460895227,
+  "average": 87.79360597776164
+}
 ```
 
 ## Diagnostics
