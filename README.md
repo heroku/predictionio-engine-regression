@@ -10,11 +10,9 @@ This engine includes 5 different Spark MlLib regression algorithms:
 * [Isotonic Regression](https://spark.apache.org/docs/2.1.0/mllib-isotonic-regression.html)
 * [Decision Tree Regression](https://spark.apache.org/docs/2.1.0/mllib-decision-tree.html#regression)
 
-The purpose of this implementation is to demostrate what its like to use multiple different algorithms in your PredictionIO engine.
-
 ## Demo Story 🐸
 
-Predict student's **class grade** based on their **aptitude score**. Several different models are trained with a small, [example data set](data/).
+Predict student's **class grade** based on their **aptitude score**. Several different models are trained with a small, [example data set](data/). The engine returns results from each algorithm as well as a combined average score.
 
 
 ## How To 📚
