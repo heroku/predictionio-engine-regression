@@ -177,7 +177,7 @@ To run evaluation for the standard linear regression algorithm:
 ```bash
 heroku run bash --size Performance-L
 $ cd pio-engine/
-$ pio eval \
+$ bin/pio eval \
     org.template.regression.SGDMeanSquaredErrorEvaluation \
     org.template.regression.SGDEngineParamsList \
     -- $PIO_SPARK_OPTS
@@ -188,7 +188,7 @@ For the Lasso algorithm:
 ```bash
 heroku run bash --size Performance-L
 $ cd pio-engine/
-$ pio eval \
+$ bin/pio eval \
     org.template.regression.LassoMeanSquaredErrorEvaluation \
     org.template.regression.LassoEngineParamsList \
     -- $PIO_SPARK_OPTS
@@ -199,7 +199,7 @@ For the Ridge algoirthm:
 ```bash
 heroku run bash --size Performance-L
 $ cd pio-engine/
-$ pio eval \
+$ bin/pio eval \
     org.template.regression.RidgeMeanSquaredErrorEvaluation \
     org.template.regression.RidgeEngineParamsList \
     -- $PIO_SPARK_OPTS
