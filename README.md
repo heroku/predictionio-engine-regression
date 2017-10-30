@@ -111,7 +111,18 @@ heroku logs -t
 
 Three of the algorithms (linear, ridge & lasso regression) used in this Engine are setup for PredictionIO's [hyperparamter tuning](https://predictionio.incubator.apache.org/evaluation/paramtuning/).
 
-To run evaluation for the lasso algorithm:
+To run evaluation for the standard linear regression algorithm:
+
+```bash
+heroku run bash --size Performance-L
+$ cd pio-engine/
+$ pio eval \
+    org.template.regression.SGDMeanSquaredErrorEvaluation \
+    org.template.regression.SGDEngineParamsList \
+    -- $PIO_SPARK_OPTS
+```
+
+For the Lasso algorithm:
 
 ```bash
 heroku run bash --size Performance-L
@@ -119,6 +130,17 @@ $ cd pio-engine/
 $ pio eval \
     org.template.regression.LassoMeanSquaredErrorEvaluation \
     org.template.regression.LassoEngineParamsList \
+    -- $PIO_SPARK_OPTS
+```
+
+For the Ridge algoirthm:
+
+```bash
+heroku run bash --size Performance-L
+$ cd pio-engine/
+$ pio eval \
+    org.template.regression.RidgeMeanSquaredErrorEvaluation \
+    org.template.regression.RidgeEngineParamsList \
     -- $PIO_SPARK_OPTS
 ```
 
