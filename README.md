@@ -2,7 +2,7 @@
 
 A machine learning app deployable to Heroku with the [PredictionIO buildpack](https://github.com/heroku/predictionio-buildpack). 
 
-This engine includes 5 different Spark MlLib regression algorithms to predict a label from a vector of values:
+This engine includes 5 different Spark MlLib regression algorithms:
 
 * [Linear Regression](https://spark.apache.org/docs/1.6.3/mllib-linear-methods.html#regression) 
 * [Lasso Regression](https://spark.apache.org/docs/2.2.0/mllib-linear-methods.html#regression)
@@ -14,7 +14,7 @@ The purpose of this implementation is to demostrate what its like to use multipl
 
 ## Demo Story 🐸
 
-This engine demonstrates prediction of a student's **class grade** based on their grade on an **aptitude test**. Several different models are trained with a small, [example data set](data/).
+Predict student's **class grade** based on their **aptitude score**. Several different models are trained with a small, [example data set](data/).
 
 
 ## How To 📚
