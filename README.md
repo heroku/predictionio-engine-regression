@@ -33,6 +33,7 @@ Please follow steps in order.
    1. [Scale-up](#user-content-scale-up)
    1. [Retry release](#user-content-retry-release)
    1. [Evaluation](#user-content-evaluation)
+1. [Local development](#user-content-local-development)
 
 ### Usage
 
