@@ -63,6 +63,9 @@ cd pio-engine-regress
 
 heroku create $ENGINE_NAME --buildpack https://github.com/heroku/predictionio-buildpack.git
 heroku addons:create heroku-postgresql:hobby-dev
+heroku config:set \
+  PIO_EVENTSERVER_APP_NAME=regression \
+  PIO_EVENTSERVER_ACCESS_KEY=$RANDOM-$RANDOM-$RANDOM-$RANDOM
 ```
 
 ### Import data
