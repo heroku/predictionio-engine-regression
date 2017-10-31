@@ -3,3 +3,10 @@ target/
 pio.log
 /pio.sbt
 /.idea/
+PredictionIO-dist
+.env
+repo
+bin
+housing.json
+housing.txt
+best.json

@@ -6,15 +6,17 @@ import org.scalatest.Matchers
 import org.apache.predictionio.data.storage.PropertyMap
 import org.joda.time.DateTime
 
-import org.apache.spark.mllib.regression.LinearRegressionModel
+import org.apache.spark.mllib.tree.DecisionTree
+import org.apache.spark.mllib.tree.model.DecisionTreeModel
+import org.apache.spark.mllib.util.MLUtils
+
 import org.apache.spark.mllib.regression.LabeledPoint
 import org.apache.spark.mllib.linalg.Vectors
 
-class AlgorithmTest
+class DecisionTreeTest
   extends FlatSpec with SharedSingletonContext with Matchers {
-
-  val params = AlgorithmParams(numIterations = 100, stepSize = 0.0004)
-  val algorithm = new LinearRegressionWithSGD(params)
+  val params = DecisionTreeParams(impurity="variance", maxDepth=5, maxBins=32)
+  val algorithm = new DecisionTreeRegression(params)
   val now = new DateTime
   val dataSource = Seq(
     ("1", PropertyMap(
@@ -42,14 +44,14 @@ class AlgorithmTest
     val dataSourceRDD = sparkContext.parallelize(dataSource)
     val preparedData = new PreparedData(values = dataSourceRDD)
     val model = algorithm.train(sparkContext, preparedData)
-    model shouldBe a [LinearRegressionModel]
+    model shouldBe a [DecisionTreeModel]
 
     val features = Vectors.dense(
       Array(80.0)
     )
+
     val y = model.predict(features)
-    y shouldEqual 78.32954840770623
-    //            78.32954840770623
+    y shouldEqual 70
     
   }
 }

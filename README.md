@@ -1,13 +1,18 @@
 # [PredictionIO](https://predictionio.incubator.apache.org) regression engine for [Heroku](http://www.heroku.com) 
 
-A machine learning app deployable to Heroku with the [PredictionIO buildpack](https://github.com/heroku/predictionio-buildpack). Use [Spark's Linear Regression algorithm](https://spark.apache.org/docs/1.6.3/mllib-linear-methods.html#regression) to predict a label from a vector of values.
+A machine learning app deployable to Heroku with the [PredictionIO buildpack](https://github.com/heroku/predictionio-buildpack). 
 
+This engine includes 5 different Spark MlLib regression algorithms:
+
+* [Linear Regression](https://spark.apache.org/docs/1.6.3/mllib-linear-methods.html#regression) 
+* [Lasso Regression](https://spark.apache.org/docs/2.2.0/mllib-linear-methods.html#regression)
+* [Ridge Regression](https://spark.apache.org/docs/2.2.0/mllib-linear-methods.html#regression)
+* [Isotonic Regression](https://spark.apache.org/docs/2.1.0/mllib-isotonic-regression.html)
+* [Decision Tree Regression](https://spark.apache.org/docs/2.1.0/mllib-decision-tree.html#regression)
 
 ## Demo Story 🐸
 
-This engine demonstrates prediction of a student's **class grade** based on their grade on an **aptitude test**. The model is trained with a small, example data set.
-
-Five **students'** aptitude and class grades are provided in the [included training data](data/).
+Predict student's **class grade** based on their **aptitude score**. Several different models are trained with a small, [example data set](data/). The engine returns results from each algorithm as well as a combined average score.
 
 
 ## How To 📚
@@ -26,6 +31,7 @@ Please follow steps in order.
    1. [Scale-up](#user-content-scale-up)
    1. [Retry release](#user-content-retry-release)
    1. [Evaluation](#user-content-evaluation)
+1. [Local development](#user-content-local-development)
 
 ### Usage
 
@@ -52,10 +58,14 @@ Once deployed, how to work with the engine.
 git clone \
   https://github.com/heroku/predictionio-engine-regression.git \
   pio-engine-regress
-
+  
 cd pio-engine-regress
 
 heroku create $ENGINE_NAME --buildpack https://github.com/heroku/predictionio-buildpack.git
+heroku addons:create heroku-postgresql:hobby-dev
+heroku config:set \
+  PIO_EVENTSERVER_APP_NAME=regression \
+  PIO_EVENTSERVER_ACCESS_KEY=$RANDOM-$RANDOM-$RANDOM-$RANDOM
 ```
 
 ### Import data
@@ -100,38 +110,69 @@ heroku releases:retry
 heroku logs -t
 ```
 
-## Evaluation
-
-This engine is already setup for PredictionIO's [hyperparamter tuning](https://predictionio.incubator.apache.org/evaluation/paramtuning/).
-
-```bash
-heroku run bash --size Performance-L
-$ cd pio-engine/
-$ pio eval \
-    org.template.regression.MeanSquaredErrorEvaluation \
-    org.template.regression.EngineParamsList \
-    -- $PIO_SPARK_OPTS
-```
-
-✏️ Memory parameters are set to fit the [dyno `--size`](https://devcenter.heroku.com/articles/dyno-types#available-dyno-types) set in the `heroku run` command.
-
 # Usage ⌨️
 
 ## Query for predictions
 
-The linear regression model should only be queried with values within the training range, `60` to `95` for the sample data.
+The engine can be queried with values that range from `30` to `95`. 
 
 ```bash
 curl -X "POST" "http://$ENGINE_NAME.herokuapp.com/queries.json" \
      -H "Content-Type: application/json; charset=utf-8" \
-     -d $'{"vector": [ 80 ]}'
+     -d $'{"vector": [ 75 ]}'
 ```
 
-Sample Response:
+The response contains predictions from all of the algorithms, as well as an average:
 
 ```json
-{"label": 78.32954840770623}
+{
+  "sgdPrediction": 89.33332526516276,
+  "decisionTreePrediction": 86,
+  "isotonicPrediction": 85,
+  "ridgePrediction": 89.32992001469317,
+  "lassoPrediction": 89.30478460895227,
+  "average": 87.79360597776164
+}
 ```
+
+## Evaluation
+
+Three of the algorithms (linear, ridge & lasso regression) used in this Engine are setup for PredictionIO's [hyperparamter tuning](https://predictionio.incubator.apache.org/evaluation/paramtuning/).
+
+Start up a one-off dyno:
+
+```bash
+heroku run bash --size Performance-L
+```
+
+To run evaluation for the standard linear regression algorithm: 
+
+```
+$ PredictionIO-dist/bin/pio eval  \
+    org.template.regression.SGDMeanSquaredErrorEvaluation \
+    org.template.regression.SGDEngineParamsList \
+    -- $PIO_SPARK_OPTS
+```
+
+For the Lasso algorithm:
+
+```bash
+$ PredictionIO-dist/bin/pio eval  \
+    org.template.regression.LassoMeanSquaredErrorEvaluation \
+    org.template.regression.LassoEngineParamsList \
+    -- $PIO_SPARK_OPTS
+```
+
+For the Ridge algoirthm:
+
+```bash
+$ PredictionIO-dist/bin/pio eval  \
+    org.template.regression.RidgeMeanSquaredErrorEvaluation \
+    org.template.regression.RidgeEngineParamsList \
+    -- $PIO_SPARK_OPTS
+```
+
+✏️ Memory parameters are set to fit the [dyno `--size`](https://devcenter.heroku.com/articles/dyno-types#available-dyno-types) set in the `heroku run` command.
 
 ## Diagnostics
 
@@ -167,3 +208,5 @@ bin/pio build
 bin/pio train
 bin/pio deploy
 ```
+
+

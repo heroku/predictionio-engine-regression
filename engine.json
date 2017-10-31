@@ -8,10 +8,39 @@
   },
   "algorithms": [
     {
-      "name": "algo",
+      "name": "sgd",
       "params": {
-        "numIterations" : 100,
-        "stepSize" : 0.0004
+        "numIterations" : 200,
+        "stepSize" : 0.00066
+      }
+    },
+    {
+      "name": "tree",
+      "params": {
+        "impurity": "variance",
+        "maxDepth":5,
+        "maxBins": 32
+      }
+    },
+    {
+      "name": "iso",
+      "params": {
+      }
+    },
+    {
+      "name": "ridge",
+      "params": {
+        "numIterations" : 200,
+        "stepSize" : 0.004,
+        "regParam" : 1
+      }
+    },
+    {
+      "name": "lasso",
+      "params": {
+        "numIterations" : 200,
+        "stepSize" : 0.001,
+        "regParam" : 2
       }
     }
   ]
