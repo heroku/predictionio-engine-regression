@@ -58,10 +58,11 @@ Once deployed, how to work with the engine.
 git clone \
   https://github.com/heroku/predictionio-engine-regression.git \
   pio-engine-regress
-
+  
 cd pio-engine-regress
 
 heroku create $ENGINE_NAME --buildpack https://github.com/heroku/predictionio-buildpack.git
+heroku addons:create heroku-postgresql:hobby-dev
 ```
 
 ### Import data
