@@ -30,8 +30,8 @@ Please follow steps in order.
    1. [Deploy the engine](#user-content-deploy-the-engine)
    1. [Scale-up](#user-content-scale-up)
    1. [Retry release](#user-content-retry-release)
-1. [Local development](#user-content-local-development)
    1. [Evaluation](#user-content-evaluation)
+1. [Local development](#user-content-local-development)
 
 ### Usage
 
@@ -135,6 +135,45 @@ The response contains predictions from all of the algorithms, as well as an aver
 }
 ```
 
+## Evaluation
+
+Three of the algorithms (linear, ridge & lasso regression) used in this Engine are setup for PredictionIO's [hyperparamter tuning](https://predictionio.incubator.apache.org/evaluation/paramtuning/).
+
+Start up a one-off dyno:
+
+```bash
+heroku run bash --size Performance-L
+```
+
+To run evaluation for the standard linear regression algorithm: 
+
+```
+$ PredictionIO-dist/bin/pio eval  \
+    org.template.regression.SGDMeanSquaredErrorEvaluation \
+    org.template.regression.SGDEngineParamsList \
+    -- $PIO_SPARK_OPTS
+```
+
+For the Lasso algorithm:
+
+```bash
+$ PredictionIO-dist/bin/pio eval  \
+    org.template.regression.LassoMeanSquaredErrorEvaluation \
+    org.template.regression.LassoEngineParamsList \
+    -- $PIO_SPARK_OPTS
+```
+
+For the Ridge algoirthm:
+
+```bash
+$ PredictionIO-dist/bin/pio eval  \
+    org.template.regression.RidgeMeanSquaredErrorEvaluation \
+    org.template.regression.RidgeEngineParamsList \
+    -- $PIO_SPARK_OPTS
+```
+
+✏️ Memory parameters are set to fit the [dyno `--size`](https://devcenter.heroku.com/articles/dyno-types#available-dyno-types) set in the `heroku run` command.
+
 ## Diagnostics
 
 If you hit any snags with the engine serving queries, check the logs:
@@ -170,41 +209,4 @@ bin/pio train
 bin/pio deploy
 ```
 
-## Evaluation
 
-Three of the algorithms (linear, ridge & lasso regression) used in this Engine are setup for PredictionIO's [hyperparamter tuning](https://predictionio.incubator.apache.org/evaluation/paramtuning/).
-
-To run evaluation for the standard linear regression algorithm:
-
-```bash
-heroku run bash --size Performance-L
-$ cd pio-engine/
-$ bin/pio eval \
-    org.template.regression.SGDMeanSquaredErrorEvaluation \
-    org.template.regression.SGDEngineParamsList \
-    -- $PIO_SPARK_OPTS
-```
-
-For the Lasso algorithm:
-
-```bash
-heroku run bash --size Performance-L
-$ cd pio-engine/
-$ bin/pio eval \
-    org.template.regression.LassoMeanSquaredErrorEvaluation \
-    org.template.regression.LassoEngineParamsList \
-    -- $PIO_SPARK_OPTS
-```
-
-For the Ridge algoirthm:
-
-```bash
-heroku run bash --size Performance-L
-$ cd pio-engine/
-$ bin/pio eval \
-    org.template.regression.RidgeMeanSquaredErrorEvaluation \
-    org.template.regression.RidgeEngineParamsList \
-    -- $PIO_SPARK_OPTS
-```
-
-✏️ Memory parameters are set to fit the [dyno `--size`](https://devcenter.heroku.com/articles/dyno-types#available-dyno-types) set in the `heroku run` command.
