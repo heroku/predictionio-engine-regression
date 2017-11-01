@@ -36,6 +36,6 @@ class LinearRegressionWithSGD(val ap: AlgorithmParams)
   override def predict(model: LinearRegressionModel, query: Query): PredictedResult = {
     val features = Vectors.dense(query.vector)
     val prediction = model.predict(features)
-    PredictedResult(sgdPrediction=Some(prediction))
+    PredictedResult(prediction)
   }
 }

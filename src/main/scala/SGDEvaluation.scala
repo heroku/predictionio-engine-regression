@@ -6,7 +6,7 @@ case class SGDMeanSquaredError()
   extends AverageMetric[EmptyEvaluationInfo, Query, PredictedResult, ActualResult] {
 
   def calculate(query: Query, pr: PredictedResult, actual: ActualResult): Double = {
-    val predicted : Double = pr.sgdPrediction.getOrElse(0)
+    val predicted : Double = pr.prediction
 
     val errorValue = math.pow(actual.label - predicted, 2)
     if (actual.label > 0 && predicted < 0 || actual.label < 0 && predicted > 0) {

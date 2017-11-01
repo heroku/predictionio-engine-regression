@@ -4,12 +4,7 @@ import org.apache.predictionio.controller.{EmptyEvaluationInfo, Engine, EngineFa
 
 case class Query(vector: Array[Double])
 case class PredictedResult(
-  sgdPrediction: Option[Double] = None,
-  decisionTreePrediction: Option[Double] = None,
-  isotonicPrediction: Option[Double] = None,
-  ridgePrediction: Option[Double] = None,
-  lassoPrediction: Option[Double] = None,
-  average: Option[Double] = None
+  prediction: Double
 )
 case class ActualResult(label: Double)
 

@@ -34,6 +34,6 @@ class IsotonicRegressionAlgorithm(val ap: IsotonicRegressionParams)
   override def predict(model: IsotonicRegressionModel, query: Query): PredictedResult = {
     val features = query.vector
     val prediction = model.predict(features(0))
-    PredictedResult(isotonicPrediction=Some(prediction))
+    PredictedResult(prediction)
   }
 }
