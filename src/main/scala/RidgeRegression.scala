@@ -37,6 +37,6 @@ class RidgeRegression(val ap: RidgeParams)
   override def predict(model: RidgeRegressionModel, query: Query): PredictedResult = {
     val features = Vectors.dense(query.vector)
     val prediction = model.predict(features)
-    PredictedResult(ridgePrediction=Some(prediction))
+    PredictedResult(prediction)
   }
 }

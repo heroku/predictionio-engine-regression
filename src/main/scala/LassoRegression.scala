@@ -37,6 +37,6 @@ class LassoRegression(val ap: LassoParams)
   override def predict(model: LassoModel, query: Query): PredictedResult = {
     val features = Vectors.dense(query.vector)
     val prediction = model.predict(features)
-    PredictedResult(lassoPrediction=Some(prediction))
+    PredictedResult(prediction)
   }
 }
