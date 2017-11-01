@@ -12,8 +12,7 @@ This engine includes 5 different Spark MlLib regression algorithms:
 
 ## Demo Story 🐸
 
-Predict student's **class grade** based on their **aptitude score**. Several different models are trained with a small, [example data set](data/). The engine returns results from each algorithm as well as a combined average score.
-
+Predict student's **class grade** based on their **aptitude score**. Several different models are trained with a small, [example data set](data/). The engine combines predictions from each algorithm and returns a single averaged prediction.
 
 ## How To 📚
 
@@ -122,16 +121,11 @@ curl -X "POST" "http://$ENGINE_NAME.herokuapp.com/queries.json" \
      -d $'{"vector": [ 75 ]}'
 ```
 
-The response contains predictions from all of the algorithms, as well as an average:
+The response contains an averages all 5 results into a single prediction:
 
 ```json
 {
-  "sgdPrediction": 89.33332526516276,
-  "decisionTreePrediction": 86,
-  "isotonicPrediction": 85,
-  "ridgePrediction": 89.32992001469317,
-  "lassoPrediction": 89.30478460895227,
-  "average": 87.79360597776164
+  "prediction": 87.49467164813471
 }
 ```
 
