@@ -121,7 +121,7 @@ curl -X "POST" "http://$ENGINE_NAME.herokuapp.com/queries.json" \
      -d $'{"vector": [ 75 ]}'
 ```
 
-The response contains an averages all 5 results into a single prediction:
+The engine returns an averaged prediction:
 
 ```json
 {
