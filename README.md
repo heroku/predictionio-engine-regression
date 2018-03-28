@@ -1,3 +1,5 @@
+⚠️ **This project is no longer active.** No further updates are planned.
+
 # [PredictionIO](https://predictionio.incubator.apache.org) regression engine for [Heroku](http://www.heroku.com) 
 
 A machine learning app deployable to Heroku with the [PredictionIO buildpack](https://github.com/heroku/predictionio-buildpack). 
